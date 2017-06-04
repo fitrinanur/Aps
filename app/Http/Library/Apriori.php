@@ -63,14 +63,9 @@ class Apriori
         $table = array();
         $array = array();
         $counter = 1;
-
-        if (!is_array($db)) {
-            $db = file($db);
-        }
-
         $num = count($db);
         for ($i = 0; $i < $num; $i++) {
-            $tmp = explode($this->delimiter, $db[$i]);
+            $tmp = $db[$i];
             $num1 = count($tmp);
             for ($j = 0; $j < $num1; $j++) {
                 $x = trim($tmp[$j]);
@@ -381,11 +376,12 @@ class Apriori
 
         foreach ($this->freqItmsts as $k => $v) {
             $tmp = array();
+
             $tmp['sup'] = $this->allsups[$k];
             $k = explode($this->delimiter, $k);
             $num = count($k);
             for ($i = 0; $i < $num; $i++) {
-                $tmp[] = $this->realName($k[$i]);
+                $tmp['items'][] = $this->realName($k[$i]);
             }
 
             $result[] = $tmp;

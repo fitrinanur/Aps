@@ -11,6 +11,8 @@
 |
 */
 
+use App\Barang;
+
 Route::get('/','Auth\LoginController@showLoginForm');
 Auth::routes();
 Route::get('home', 'HomeController@index')->name('home');
@@ -33,8 +35,17 @@ Route::post('barang/import', 'BarangController@doImport');
 Route::get('barang/delete/{id}', 'BarangController@delete');
 
 Route::get('rule', 'RuleController@index');
+Route::post('rule/proses', 'RuleController@proses');
 Route::get('analisa', 'AnalisaController@index');
 Route::post('analisa', 'AnalisaController@proses');
 
 Route::get('simulasi', 'SimulasiController@index');
-Route::post('simulasi', 'SimulasiController@proses');
+Route::post('simulasi/proses', 'SimulasiController@proses');
+
+Route::get('test', function () {
+    $data = Barang::groupBy('no_faktur')->selectRaw('group_concat(nama_barang) as "group_barang"')
+        ->get()->map(function($row) {
+            return explode(',',$row['group_barang']);
+        })->toArray();
+    return $data;
+});

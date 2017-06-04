@@ -13,16 +13,24 @@
                             <i class="fa fa-align-justify"></i> Data Rule
                         </div>
                         <div class="card-block">
-                            <form action="{{url('url/proses')}}" class="form-horizontal">
+                            @if (session('status'))
+                                <div class="alert alert-success">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+                            <form action="{{url('rule/proses')}}" method="post" class="form-horizontal">
                                 <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <input type="text" name="min_conf" class="form-control" placeholder="min confidence">
+                                    <div class="col-md-3">
+                                        <label for="name">Min Confidence</label>
+                                        <input type="text" name="min_conf" class="form-control" placeholder="min confidence" value="{{$min_conf}}">
+                                        {{csrf_field()}}
                                     </div>
-                                    <div class="col-md-4">
-                                        <input type="text" name="min_sup" class="form-control" placeholder="min support">
+                                    <div class="col-md-3">
+                                        <label for="name">Min Support</label>
+                                        <input type="text" name="min_sup" class="form-control" placeholder="min support" value="{{$min_sup}}">
                                     </div>
-                                    <div class="col-md-4">
-                                        <button type="submit" class="btn btn-primary">Proses</button>
+                                    <div class="col-md-3">
+                                        <button type="submit" style="margin-top: 30px" class="btn btn-primary">Proses</button>
                                     </div>
                                 </div>
                             </form>
@@ -31,15 +39,22 @@
                                     <tr>
                                         <th>Jika</th>
                                         <th>Maka</th>
+                                        <th>Support</th>
+                                        <th>Confidence</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>Pompeius René</td>
-                                    <td>2012/01/01</td>
-                                </tr>
+                                @foreach($rules as $rule)
+                                    <tr>
+                                        <td>{{$rule->antecedent}}</td>
+                                        <td>{{$rule->consequent}}</td>
+                                        <td>{{$rule->support}}</td>
+                                        <td>{{$rule->confidence}}</td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
+                                {{ $rules->links('vendor.pagination.bootstrap-4') }}
                         </div>
                     </div>
                 </div>

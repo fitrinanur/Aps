@@ -13,9 +13,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('barang')}}"><i class="icon-puzzle"></i> Penjualan Barang</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url('stok')}}"><i class="icon-puzzle"></i> Stok</a>
-                    </li>
+                    {{--<li class="nav-item">--}}
+                        {{--<a class="nav-link" href="{{url('stok')}}"><i class="icon-puzzle"></i> Stok</a>--}}
+                    {{--</li>--}}
                 </ul>
             </li>
             <li class="nav-item nav-dropdown">

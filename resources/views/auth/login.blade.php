@@ -48,7 +48,7 @@
                 <div class="card card-inverse card-primary py-3 hidden-md-down" style="width:44%">
                     <div class="card-block text-center">
                         <div>
-                            <p><img src="img/ea.png" alt="" width="110px" height="110px"/> </p>
+                            <p><img src="img/sinus.png" alt="" width="110px" height="110px"/> </p>
                             <p>Prediksi Stok Barang Menggunakan<br>Algoritma Apriori</p>
                         </div>
                     </div>
