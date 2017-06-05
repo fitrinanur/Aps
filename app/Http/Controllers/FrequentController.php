@@ -2,35 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Barang;
-use App\Frequent;
-use App\Rule;
-use App\Setting;
-use Illuminate\Http\Request;
-use Phpml\Association\Apriori;
 
-class RuleController extends Controller
+use App\Frequent;
+use Illuminate\Http\Request;
+
+class FrequentController extends Controller
 {
-    private $setting;
-    private $barang;
-    private $rule;
     private $frequent;
 
-    public function __construct(Setting $setting, Barang $barang, Rule $rule, Frequent $frequent)
+    public function __construct(Frequent $frequent)
     {
         $this->middleware('auth');
-        $this->setting = $setting;
-        $this->barang = $barang;
-        $this->rule = $rule;
         $this->frequent = $frequent;
     }
 
     public function index()
     {
-        $data['min_conf'] = $this->setting->find('min_conf')->value;
-        $data['min_sup'] = $this->setting->find('min_sup')->value;
-        $data['rules'] = $this->rule->paginate(30);
-        return view('pages.rule', $data);
+        $data['freqs'] = $this->frequent->get();
+        return view('pages.frequent', $data);
     }
 
     public function proses(Request $request)

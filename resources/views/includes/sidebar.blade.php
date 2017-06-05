@@ -25,6 +25,9 @@
                         <a class="nav-link" href="{{url('rule')}}"><i class="icon-puzzle"></i> Rule</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{url('frequent')}}"><i class="icon-puzzle"></i> Frequent Item</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{url('simulasi')}}"><i class="icon-puzzle"></i> Simulasi</a>
                     </li>
                 </ul>

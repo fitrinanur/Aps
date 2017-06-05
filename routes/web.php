@@ -36,6 +36,8 @@ Route::get('barang/delete/{id}', 'BarangController@delete');
 
 Route::get('rule', 'RuleController@index');
 Route::post('rule/proses', 'RuleController@proses');
+Route::get('frequent', 'FrequentController@index');
+
 Route::get('analisa', 'AnalisaController@index');
 Route::post('analisa', 'AnalisaController@proses');
 
@@ -43,9 +45,5 @@ Route::get('simulasi', 'SimulasiController@index');
 Route::post('simulasi/proses', 'SimulasiController@proses');
 
 Route::get('test', function () {
-    $data = Barang::groupBy('no_faktur')->selectRaw('group_concat(nama_barang) as "group_barang"')
-        ->get()->map(function($row) {
-            return explode(',',$row['group_barang']);
-        })->toArray();
-    return $data;
+
 });
