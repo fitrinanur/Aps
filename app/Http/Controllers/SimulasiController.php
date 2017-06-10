@@ -11,6 +11,7 @@ class SimulasiController extends Controller
 {
     private $barang;
     private $setting;
+
     /**
      * Create a new controller instance.
      *
@@ -31,6 +32,21 @@ class SimulasiController extends Controller
     public function index()
     {
         $data['barangs'] = $this->barang->groupBy('kode_barang')->orderBy('kode_barang')->get();
+        $predicts = [];
+        if (session('result')['predicts']) {
+            foreach (session('result')['predicts'] as $barang) {
+                if (is_array($barang)) {
+                    foreach ($barang as $row) {
+                        $rows = explode('-', $row);
+                        $predicts[$rows[0]] = $rows[1];
+                    }
+                } else {
+                    $rows = explode('-', $barang);
+                    $predicts[$rows[0]] = $rows[1];
+                }
+            }
+        }
+        $data['predicts'] = $predicts;
         return view('pages.simulasi', $data);
     }
 
@@ -40,7 +56,7 @@ class SimulasiController extends Controller
         $min_conf = $this->setting->find('min_conf')->value;
         $min_sup = $this->setting->find('min_sup')->value;
         $labels = [];
-        $associator = new Apriori($min_sup/100, $min_conf/100);
+        $associator = new Apriori($min_sup / 100, $min_conf / 100);
         $associator->train($this->barang->getData(), $labels);
         $predicts = $associator->predict($barangs);
         return redirect('simulasi')->with('result', ['predicts' => $predicts, 'barangs' => $barangs]);

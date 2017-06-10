@@ -65,22 +65,11 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach(session('result')['predicts'] as $barang)
-                                        @if(is_array($barang))
-                                            @foreach($barang as $row)
-                                                <?php $row = explode('-', $row)?>
-                                                <tr>
-                                                    <td>{{$row[0]}}</td>
-                                                    <td>{{$row[1]}}</td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                            <?php $row = explode('-', $barang)?>
-                                            <tr>
-                                                <td>{{$row[0]}}</td>
-                                                <td>{{$row[1]}}</td>
-                                            </tr>
-                                        @endif
+                                    @foreach($predicts as $no => $barang)
+                                        <tr>
+                                            <td>{{$row[0]}}</td>
+                                            <td>{{$row[1]}}</td>
+                                        </tr>
                                     @endforeach
                                     </tbody>
                                 </table>
