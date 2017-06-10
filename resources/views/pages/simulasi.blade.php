@@ -67,8 +67,8 @@
                                     <tbody>
                                     @foreach($predicts as $no => $barang)
                                         <tr>
-                                            <td>{{$row[0]}}</td>
-                                            <td>{{$row[1]}}</td>
+                                            <td>{{$no}}</td>
+                                            <td>{{$barang}}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>

@@ -45,5 +45,14 @@ Route::get('simulasi', 'SimulasiController@index');
 Route::post('simulasi/proses', 'SimulasiController@proses');
 
 Route::get('test', function () {
-
+    $words = array('red', 'blue', 'green');
+    $num = count($words);
+    $total = pow(2, $num);
+    $combinations = [];
+    for ($i = 0; $i < $total; $i++) {
+        for ($j = 0; $j < $num; $j++) {
+            if (pow(2, $j) & $i) $combinations[$i][] = $words[$j];
+        }
+    }
+    print_r($combinations);
 });

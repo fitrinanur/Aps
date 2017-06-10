@@ -34,18 +34,9 @@ class SimulasiController extends Controller
         $data['barangs'] = $this->barang->groupBy('kode_barang')->orderBy('kode_barang')->get();
         $predicts = [];
         if (session('result')['predicts']) {
-            foreach (session('result')['predicts'] as $barang) {
-                if (is_array($barang)) {
-                    foreach ($barang as $row) {
-                        $rows = explode('-', $row);
-                        $predicts[$rows[0]] = $rows[1];
-                    }
-                } else {
-                    $rows = explode('-', $barang);
-                    $predicts[$rows[0]] = $rows[1];
-                }
-            }
+            $predicts = session('result')['predicts'];
         }
+
         $data['predicts'] = $predicts;
         return view('pages.simulasi', $data);
     }
@@ -55,10 +46,36 @@ class SimulasiController extends Controller
         $barangs = $request->barang;
         $min_conf = $this->setting->find('min_conf')->value;
         $min_sup = $this->setting->find('min_sup')->value;
-        $labels = [];
         $associator = new Apriori($min_sup / 100, $min_conf / 100);
-        $associator->train($this->barang->getData(), $labels);
-        $predicts = $associator->predict($barangs);
-        return redirect('simulasi')->with('result', ['predicts' => $predicts, 'barangs' => $barangs]);
+        $associator->train($this->barang->getData(), []);
+
+        // combination
+        $num = count($barangs);
+        $total = pow(2, $num);
+        for ($i = 0; $i < $total; $i++) {
+            for ($j = 0; $j < $num; $j++) {
+                if (pow(2, $j) & $i)
+                    $combinations[$i][] = $barangs[$j];
+            }
+        }
+
+        foreach ($combinations as $combination) {
+            $result = $associator->predict($combination);
+            if ($result) {
+                $predicts[] = $result;
+            }
+        }
+
+        $collections = collect($predicts)->flatten()
+            ->unique()
+            ->reject(function($value) use ($barangs){
+                return in_array($value, $barangs);
+            })
+            ->mapWithKeys(function($value){
+                $values = explode('-', $value);
+                return [$values[0] => $values[1]];
+            })
+            ->all();
+        return redirect('simulasi')->with('result', ['predicts' => $collections, 'barangs' => $barangs]);
     }
 }
