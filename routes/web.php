@@ -11,20 +11,9 @@
 |
 */
 
-use App\Barang;
-
 Route::get('/','Auth\LoginController@showLoginForm');
 Auth::routes();
 Route::get('home', 'HomeController@index')->name('home');
-Route::get('stok', 'StokController@index');
-Route::get('stok/create', 'StokController@create');
-Route::post('stok/create', 'StokController@store');
-Route::get('stok/edit/{id}', 'StokController@edit');
-Route::post('stok/edit/{id}', 'StokController@update');
-Route::get('stok/import', 'StokController@import');
-Route::post('stok/import', 'StokController@doImport');
-Route::get('stok/delete/{id}', 'StokController@delete');
-
 Route::get('barang', 'BarangController@index');
 Route::get('barang/create', 'BarangController@create');
 Route::post('barang/create', 'BarangController@store');
@@ -39,21 +28,5 @@ Route::get('rule', 'RuleController@index');
 Route::post('rule/proses', 'RuleController@proses');
 Route::get('frequent', 'FrequentController@index');
 
-Route::get('analisa', 'AnalisaController@index');
-Route::post('analisa', 'AnalisaController@proses');
-
 Route::get('simulasi', 'SimulasiController@index');
 Route::post('simulasi/proses', 'SimulasiController@proses');
-
-Route::get('test', function () {
-    $words = array('red', 'blue', 'green');
-    $num = count($words);
-    $total = pow(2, $num);
-    $combinations = [];
-    for ($i = 0; $i < $total; $i++) {
-        for ($j = 0; $j < $num; $j++) {
-            if (pow(2, $j) & $i) $combinations[$i][] = $words[$j];
-        }
-    }
-    print_r($combinations);
-});

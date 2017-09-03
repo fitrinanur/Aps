@@ -31,7 +31,7 @@ class BarangController extends Controller
 
     public function export()
     {
-        $datas =  $this->barang->get()->toArray();
+        $datas =  $this->barang->get(['no_faktur','kode_barang','nama_barang','qty'])->toArray();
         return Excel::create('barang', function($excel) use ($datas) {
             $excel->sheet('barang', function($sheet) use ($datas) {
                 $sheet->fromArray($datas);
