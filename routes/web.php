@@ -32,6 +32,7 @@ Route::get('barang/edit/{id}', 'BarangController@edit');
 Route::post('barang/edit/{id}', 'BarangController@update');
 Route::get('barang/import', 'BarangController@import');
 Route::post('barang/import', 'BarangController@doImport');
+Route::get('barang/export', 'BarangController@export');
 Route::get('barang/delete/{id}', 'BarangController@delete');
 
 Route::get('rule', 'RuleController@index');

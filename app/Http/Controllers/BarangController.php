@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Barang;
 use App\Library\BarangImport;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BarangController extends Controller
 {
@@ -14,25 +16,27 @@ class BarangController extends Controller
         $this->barang = $barang;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data['barangs'] = $this->barang->orderBy('no_faktur')->paginate(30);
+        $search = $request->input('search', '');
+        $data['search'] = $search;
+        $data['barangs'] = $this->barang->where('nama_barang','like', "%$search%")->orderBy('no_faktur')->paginate(30);
         return view('pages.barang', $data);
-    }
-
-    public function create()
-    {
-
-    }
-
-    public function store()
-    {
-
     }
 
     public function import()
     {
         return view('pages.barang-import');
+    }
+
+    public function export()
+    {
+        $datas =  $this->barang->get()->toArray();
+        return Excel::create('barang', function($excel) use ($datas) {
+            $excel->sheet('barang', function($sheet) use ($datas) {
+                $sheet->fromArray($datas);
+            });
+        })->export('csv');
     }
 
     public function doImport(BarangImport $import)
@@ -43,18 +47,25 @@ class BarangController extends Controller
         return redirect('barang')->with('status', 'Import barang berhasil');
     }
 
-    public function edit()
+    public function edit($id)
     {
-
+        $barang = $this->barang->find($id);
+        return view('pages.barang-edit', ['barang' => $barang]);
     }
 
-    public function update()
+    public function update($id, Request $request)
     {
-
+        $barang = $this->barang->find($id);
+        $barang->no_faktur = $request->no_faktur;
+        $barang->kode_barang = $request->kode_barang;
+        $barang->nama_barang = $request->nama_barang;
+        $barang->save();
+        return redirect('barang')->with('status', 'Update barang berhasil');
     }
 
-    public function delete()
+    public function delete($id)
     {
-
+        $this->barang->find($id)->delete();
+        return redirect('barang')->with('status', 'barang berhasil dihapus');
     }
 }

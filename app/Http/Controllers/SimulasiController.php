@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Barang;
+use App\Frequent;
 use App\Setting;
 use Illuminate\Http\Request;
 use Phpml\Association\Apriori;
@@ -11,17 +12,19 @@ class SimulasiController extends Controller
 {
     private $barang;
     private $setting;
+    private $frequent;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(Barang $barang, Setting $setting)
+    public function __construct(Barang $barang, Setting $setting, Frequent $frequent)
     {
         $this->middleware('auth');
         $this->barang = $barang;
         $this->setting = $setting;
+        $this->frequent = $frequent;
     }
 
     /**
@@ -48,8 +51,8 @@ class SimulasiController extends Controller
         $min_sup = $this->setting->find('min_sup')->value;
         $associator = new Apriori($min_sup / 100, $min_conf / 100);
         $associator->train($this->barang->getData(), []);
-
         // combination
+        $predicts = [];
         $num = count($barangs);
         $total = pow(2, $num);
         for ($i = 0; $i < $total; $i++) {
@@ -66,8 +69,12 @@ class SimulasiController extends Controller
             }
         }
 
-        $collections = collect($predicts)->flatten()
+        $collections = collect($predicts)
+            // merge array
+            ->flatten()
+            // remove duplicate items
             ->unique()
+            // remove if item is exist in item request
             ->reject(function($value) use ($barangs){
                 return in_array($value, $barangs);
             })
@@ -76,6 +83,15 @@ class SimulasiController extends Controller
                 return [$values[0] => $values[1]];
             })
             ->all();
-        return redirect('simulasi')->with('result', ['predicts' => $collections, 'barangs' => $barangs]);
+        $data = [
+            'predicts' => $collections,
+            'barangs' => $barangs,
+            'freqs' => $this->frequent->get(),
+            'min_conf' => $min_conf,
+            'min_sup' => $min_sup,
+            'iterations' => array_key_exists('frequent_support', $associator->debug) ? $associator->debug['frequent_support'] : [],
+            'rules' => $associator->getRules()
+        ];
+        return redirect('simulasi')->with('result', $data);
     }
 }
