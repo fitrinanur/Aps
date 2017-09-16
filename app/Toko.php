@@ -3,9 +3,9 @@
 namespace App;
 use Illuminate\Database\Eloquent\Model;
 
-class Setting extends Model
+class Toko extends Model
 {
-    protected $primaryKey = 'key';
-    protected $table = 'setting';
-    protected $fillable = ['key', 'value'];
+    protected $primaryKey = 'id';
+    protected $table = 'toko';
+    protected $fillable = ['nama'];
 }

@@ -21,6 +21,8 @@ class SimulasiController extends Controller
      */
     public function __construct(Barang $barang, Setting $setting, Frequent $frequent)
     {
+        // ambil data barang,setting,frequent
+        //login only
         $this->middleware('auth');
         $this->barang = $barang;
         $this->setting = $setting;
@@ -47,9 +49,11 @@ class SimulasiController extends Controller
     public function proses(Request $request)
     {
         $barangs = $request->barang;
+
         $min_conf = $this->setting->find('min_conf')->value;
         $min_sup = $this->setting->find('min_sup')->value;
         $associator = new Apriori($min_sup / 100, $min_conf / 100);
+        //get data sample dari import barang
         $associator->train($this->barang->getData(), []);
         // combination
         $predicts = [];

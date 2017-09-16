@@ -30,3 +30,10 @@ Route::get('frequent', 'FrequentController@index');
 
 Route::get('simulasi', 'SimulasiController@index');
 Route::post('simulasi/proses', 'SimulasiController@proses');
+
+Route::get('toko', 'TokoController@index');
+Route::get('toko/create', 'TokoController@create');
+Route::post('toko/create', 'TokoController@store');
+Route::get('toko/edit/{id}', 'TokoController@edit');
+Route::post('toko/edit/{id}', 'TokoController@update');
+Route::get('toko/delete/{id}', 'TokoController@delete');
