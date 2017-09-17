@@ -30,7 +30,19 @@ class RuleController extends Controller
         $data['min_conf'] = $this->setting->find('min_conf')->value;
         $data['min_sup'] = $this->setting->find('min_sup')->value;
         $data['rules'] = $this->rule->paginate(30);
+        $data['support'] = $this->info();
         return view('pages.rule', $data);
+    }
+
+    public function info()
+    {
+        $frequents = $this->frequent->get();
+        $avg_support = 0;
+        if ($frequents) {
+            $avg_support = $frequents->avg('support');
+        }
+
+        return $avg_support;
     }
 
     public function proses(Request $request)
