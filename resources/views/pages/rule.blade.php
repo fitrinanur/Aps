@@ -33,11 +33,15 @@
                                         <button type="submit" style="margin-top: 30px" class="btn btn-primary">Proses</button>
                                     </div>
                                 </div>
-                                <div class="" style="background-color: #8dd0da">
-                                    <p>Info :</p>
-                                    <p>Rata-rata Frequent Item Set Data = 40</p>
-                                    <p>Range minimal support : 30-70, Range minimal confidence : 50 - 80</p>
-                                    <p>Semakin kecil nilai support dan confidence semakin banyak hasil keterkaitan barang</p>
+                                <div class="" style="background-color: #8dd0da; padding: 10px">
+                                    @if($support)
+                                        Info : <br>
+                                        Rata-rata Frequent Item Set Data = {{$support * 100}} <br>
+                                        Range minimal support : {{$support * 100 - 10}}-{{$support * 100 + 10}}, Range minimal confidence : 40 - 60 <br>
+                                        Semakin kecil nilai support dan confidence semakin banyak hasil keterkaitan barang
+                                    @else
+                                        <p>Frequent Item Masih Kosong</p>
+                                    @endif
                                 </div>
                             </form>
 
